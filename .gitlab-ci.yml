@@ -1,3 +1,7 @@
+stages:
+  - package
+
+
 package-docker-qa:
   stage: package
   resource_group: qa
