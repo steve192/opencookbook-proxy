@@ -1,0 +1,25 @@
+name: Build & Test
+
+# Reusable validation suite: builds the image and smoke tests its routing against stub
+# upstreams. Called by ci.yml for pushes and pull requests, so the validation logic lives in
+# one place.
+
+on:
+  workflow_call:
+
+jobs:
+  image:
+    name: Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Build Docker image (no push)
+        uses: ./.github/actions/publish-image
+        with:
+          push: "false"
+          tags: opencookbook-proxy-ci:${{ github.sha }}
+
+      - name: Smoke test Docker image
+        run: bash scripts/smoke-test-image.sh opencookbook-proxy-ci:${{ github.sha }}

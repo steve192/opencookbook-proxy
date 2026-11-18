@@ -1,0 +1,27 @@
+name: Publish preview
+
+# Manual preview channel: builds the image from the current ref and publishes it as the
+# `:preview` image, without creating a release.
+
+on: workflow_dispatch
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  publish-docker:
+    name: Publish preview image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Build and push Docker image
+        uses: ./.github/actions/publish-image
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:preview

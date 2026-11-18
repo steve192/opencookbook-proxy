@@ -1,0 +1,56 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommits"
+  ],
+  "timezone": "UTC",
+  "dependencyDashboard": true,
+  "minimumReleaseAge": "7 days",
+  "platformAutomerge": true,
+  "automergeType": "branch",
+  "labels": [
+    "dependencies"
+  ],
+  "packageRules": [
+    {
+      "description": "Safely automerge patch and digest updates",
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
+      "automerge": true
+    },
+    {
+      "description": "Never automerge major updates",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false
+    },
+    {
+      "description": "nginx base image - the smoke test in CI checks the routing before a bump lands",
+      "matchManagers": [
+        "dockerfile"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "docker-base-images",
+      "automerge": true
+    },
+    {
+      "description": "GitHub Actions workflow dependencies",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "groupName": "github-actions",
+      "automerge": true
+    }
+  ]
+}
